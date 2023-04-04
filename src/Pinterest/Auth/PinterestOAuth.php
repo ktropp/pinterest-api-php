@@ -47,7 +47,7 @@ class PinterestOAuth {
     /**
      * Pinterest's oauth endpoint
      */
-    const AUTH_HOST = "https://api.pinterest.com/oauth/";
+    const AUTH_HOST = "https://www.pinterest.com/oauth/";
 
     /**
      * Construct
