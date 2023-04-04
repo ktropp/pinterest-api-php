@@ -93,9 +93,9 @@ class Request {
      * @param  array    $parameters
      * @return Response
      */
-    public function post($endpoint, array $parameters = array())
+    public function post($endpoint, array $parameters = array(), $headers = [])
     {
-        return $this->execute("POST", sprintf("%s%s", $this->host, $endpoint), $parameters);
+        return $this->execute("POST", sprintf("%s%s", $this->host, $endpoint), $parameters, $headers);
     }
 
     /**
