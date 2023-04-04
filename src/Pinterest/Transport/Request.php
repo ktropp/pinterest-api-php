@@ -21,7 +21,7 @@ class Request {
      *
      * @var string
      */
-    private $host = "https://api.pinterest.com/v1/";
+    private $host = "https://api.pinterest.com/v5/";
 
     /**
      * Access token
