@@ -128,12 +128,13 @@ class PinterestOAuth {
      * @param  string   $code
      * @return \DirkGroenen\Pinterest\Transport\Response
      */
-    public function getOAuthToken($code)
+    public function getOAuthToken($code, $redirect_uri)
     {
         // Build data array
         $data = array(
             "grant_type"    => "authorization_code",
-            "code"          => $code
+            "code"          => $code,
+            "redirect_uri"  => $redirect_uri
         );
 
         $headers = [
