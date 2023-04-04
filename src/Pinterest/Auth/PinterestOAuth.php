@@ -139,6 +139,7 @@ class PinterestOAuth {
 
         $headers = [
             'Authorization: Basic ' . base64_encode($this->client_id . ':' . $this->client_secret),
+            'Content-Type: application/x-www-form-urlencoded'
         ];
         
         // Perform post request
