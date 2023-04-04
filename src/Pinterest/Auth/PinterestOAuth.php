@@ -133,13 +133,15 @@ class PinterestOAuth {
         // Build data array
         $data = array(
             "grant_type"    => "authorization_code",
-            "client_id"     => $this->client_id,
-            "client_secret" => $this->client_secret,
             "code"          => $code
         );
 
+        $headers = [
+            'Authorization: Basic ' . base64_encode($this->client_id . ':' . $this->client_secret),
+        ];
+        
         // Perform post request
-        $response = $this->request->post("oauth/token", $data);
+        $response = $this->request->post("oauth/token", $data, $headers);
 
         return $response;
     }
