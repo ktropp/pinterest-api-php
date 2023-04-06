@@ -199,11 +199,21 @@ class Request {
 
         switch ($method) {
             case 'POST':
-                $ch->setOptions(array(
-                    CURLOPT_CUSTOMREQUEST   => "POST",
-                    CURLOPT_POST            => count($parameters),
-                    CURLOPT_POSTFIELDS      => http_build_query($parameters)
-                ));
+                //if Authorization: Basic is in the headers array
+                if (in_array('Authorization: Basic', $headers)) {
+                    //oauth2
+                    $ch->setOptions(array(
+                        CURLOPT_CUSTOMREQUEST   => "POST",
+                        CURLOPT_POST            => count($parameters),
+                        CURLOPT_POSTFIELDS      => http_build_query($parameters)
+                    ));
+                } else {
+                    $ch->setOptions(array(
+                        CURLOPT_CUSTOMREQUEST   => "POST",
+                        CURLOPT_POST            => count($parameters),
+                        CURLOPT_POSTFIELDS      => json_encode($parameters)
+                    ));
+                }
 
                 if (!class_exists('\CURLFile') && defined('CURLOPT_SAFE_UPLOAD')) {
                     $ch->setOption(CURLOPT_SAFE_UPLOAD, false);
