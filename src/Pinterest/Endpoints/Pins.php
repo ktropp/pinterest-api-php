@@ -63,7 +63,11 @@ class Pins extends Endpoint {
             }
         }
 
-        $response = $this->request->post("pins/", $data);
+        $headers = [
+            "Content-Type: application/json"
+        ];
+
+        $response = $this->request->post("pins", $data, $headers);
         return new Pin($this->master, $response);
     }
 
