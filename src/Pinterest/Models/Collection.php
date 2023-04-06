@@ -61,7 +61,7 @@ class Collection implements \JsonSerializable, \ArrayAccess, \IteratorAggregate{
      * @param  string               $model
      * @throws InvalidModelException
      */
-    public function __construct(Pinterest $master, $items, $model) {
+    public function __construct(Pinterest $master, $items, $model, $request = false) {
         $this->master = $master;
 
         // Create class path
@@ -77,7 +77,7 @@ class Collection implements \JsonSerializable, \ArrayAccess, \IteratorAggregate{
             $this->items = $items;
         } else if ($items instanceof \DirkGroenen\Pinterest\Transport\Response) {
             $this->response = $items;
-            $this->items = $items->data;
+            $this->items = $items->items;
         } else {
             throw new PinterestException("$items needs to be an instance of Transport\Response or an array.");
         }
@@ -86,8 +86,12 @@ class Collection implements \JsonSerializable, \ArrayAccess, \IteratorAggregate{
         $this->items = $this->buildCollectionModels($this->items);
 
         // Add pagination object
-        if (isset($this->response->page) && !empty($this->response->page['next'])) {
-            $this->pagination = $this->response->page;
+        if (isset($this->response->bookmark) && $this->response->bookmark) {
+            if(isset($request[1]))
+                $request[1] = array_merge($request[1], ['bookmark' => $this->response->bookmark]);
+            if(isset($request[1]['bookmark']))
+                $request[1]['bookmark'] = $this->response->bookmark;
+            $this->pagination = $request;
         } else {
             $this->pagination = false;
         }
@@ -131,14 +135,14 @@ class Collection implements \JsonSerializable, \ArrayAccess, \IteratorAggregate{
      */
     public function hasNextPage()
     {
-        return ($this->response != null && isset($this->response->page['next']));
+        return ($this->response != null && isset($this->response->bookmark) && $this->pagination);
     }
 
     public function nextPage()
     {
         if ($this->hasNextPage()) {
-            $response = $this->master->request->execute('GET', $this->response->page['next']);
-            return new self($this->master, $response, $this->model);
+            $response = $this->master->request->get($this->pagination[0], $this->pagination[1]);
+            return new self($this->master, $response, $this->model, $this->pagination);
         }
     }
 
