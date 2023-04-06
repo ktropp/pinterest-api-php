@@ -11,6 +11,7 @@
 namespace DirkGroenen\Pinterest\Endpoints;
 
 use DirkGroenen\Pinterest\Models\Board;
+use DirkGroenen\Pinterest\Models\Collection;
 
 class Boards extends Endpoint {
 
@@ -30,6 +31,20 @@ class Boards extends Endpoint {
     }
 
     /**
+     * List all boards
+     *
+     * @access public
+     * @param  array     $data
+     * @throws Exceptions/PinterestExceptions
+     * @return Collection
+     */
+    public function list(array $data = [])
+    {
+        $response = $this->request->get("boards", $data);
+        return new Collection($this->master, $response, "Board", ["boards", $data]);
+    }
+
+    /**
      * Create a new board
      *
      * @access public
@@ -39,7 +54,10 @@ class Boards extends Endpoint {
      */
     public function create(array $data)
     {
-        $response = $this->request->post("boards/", $data);
+        $headers = [
+            "Content-Type: application/json"
+        ];
+        $response = $this->request->post("boards", $data, $headers);
         return new Board($this->master, $response);
     }
 
