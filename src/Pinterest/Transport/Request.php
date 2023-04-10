@@ -200,7 +200,7 @@ class Request {
         switch ($method) {
             case 'POST':
                 //if Authorization: Basic is in the headers array
-                if (in_array('Authorization: Basic', $headers)) {
+                if (in_array('Content-Type: application/x-www-form-urlencoded', $headers)) {
                     //oauth2
                     $ch->setOptions(array(
                         CURLOPT_CUSTOMREQUEST   => "POST",
