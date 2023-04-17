@@ -49,6 +49,10 @@ class Response {
             $this->response = $this->decodeString($response);
         }
     }
+    
+    public function getData(){
+        return $this->response;
+    }
 
     /**
      * Decode the string to an array
